@@ -24,9 +24,7 @@ compile:
 package:
   override:
     - mvn package | perl -pe 's/\r/\n/g'
-  post:
-    - find | grep war
-
+    - find
 deployment:
   transfer:
     /var/lib/tomcat8/webapps:
