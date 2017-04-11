@@ -1,0 +1,33 @@
+machine:
+
+  timezone:
+    Asia/Shanghai
+
+  language: java
+  java:
+    version: java7
+
+
+dependencies:
+  pre:
+    - echo "$PATH"
+    - echo -e "*** \e[31;4mcurrent java version\e[31;0m ***"
+    - java -version
+    - ls -alh /etc/profile.d
+
+compile:
+  pre:
+    - echo -e "*** \e[31;4mstart compiling\e[31;0m ***"
+  override:
+    - mvn compile  | perl -pe 's/\r/\n/g'
+
+package:
+  override:
+    - mvn package | perl -pe 's/\r/\n/g'
+  post:
+    - find | grep war
+
+deployment:
+  transfer:
+    /var/lib/tomcat8/webapps:
+      - "target/themes.war"
